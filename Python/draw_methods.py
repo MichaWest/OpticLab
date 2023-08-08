@@ -6,8 +6,8 @@ fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 ax.set_xlabel("$x, \mu m$")
 ax.set_ylabel("$y, \mu m$")
-ax.set_xlim(0, 80)
-ax.set_ylim(0, 80)
+#ax.set_xlim(0, 80)
+#ax.set_ylim(0, 80)
 ax.set_aspect('equal') 
 ax.grid()
 
@@ -182,14 +182,19 @@ def line_Pesa(antaus, x_0, y_0, x, y):
 
     pesa_x.connect()
     pesa_y.connect()
+
     pesa_x.move(x_cords[0])
     pesa_y.move(y_cords[0])
+
+    antaus.schutter_open()
     for i in range(0, x_cords.size):
         pesa_x.move(x_cords[i])
         pesa_y.move(y_cords[i])
-        antaus.schutter_open()
+        #antaus.schutter_open()
         time.sleep(dt)
-        antaus.schutter_close()
+        #antaus.schutter_close()
+    antaus.schutter_close()
+
     pesa_x.disconnect()
     pesa_y.disconnect()
 
@@ -258,5 +263,54 @@ def heart_Pesa(antaus, l=20, center_x = 40, center_y = 40):
     pesa_x.disconnect()
 
     plt.scatter(r[:, 0], r[:, 1])
+
+
+# Линия
+# (x_0, y_0) - start
+# (x, y) - end
+def line_Ximc(antaus, x_0, x, y, id):
+    ximc = Ximc(id)
+    dr = 5 # координатный шаг
+    dt = 2 # временной шаг 
+
+    if id == 2:
+        ximc_y = Ximc(0)
+        ximc_y.connect()
+        ximc_y.move(y, 0)
+        ximc_y.disconnect()
+    elif id==0: 
+        ximc_y = Ximc(2)
+        ximc_y.connect()
+        ximc_y.move(y, 0)
+        ximc_y.disconnect()
+
+    ximc.connect()
+
+    ximc.move(x_0, 0)
+    time.sleep(dt)
+    antaus.schutter_open()  
+    time.sleep(dt)
+    ximc.move(x, 0)
+    time.sleep((x-x_0)/50)
+    antaus.schutter_close()
+
+    ximc.disconnect()
+
+
+def grid_Ximc(antaus, n, m, dx, dy, x_0, y_0):
+    x = x_0 + dx*m  # x-x_0 - ширина сетки
+    y = y_0 + dy*n  # y-y_0 - высота сетки
+
+
+    for i in range(0, m+1):
+        line_Ximc(antaus, y_0, y, x_0+i*dx, 2)
+        plt.plot([x_0+i*dx, x_0+i*dx], [y_0, y])
+        time.sleep(0.5)
+
+    for i in range(0, n+1):
+       
+        line_Ximc(antaus, x_0, x, y_0+i*dy, 0)
+        plt.plot([x_0, x], [y_0+i*dy, y_0+i*dy])
+        time.sleep(0.5)
 
 

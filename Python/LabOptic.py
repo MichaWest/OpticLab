@@ -7,9 +7,9 @@ import platform
 import tempfile
 import re
 import serial
-import antaus as ant
 import matplotlib.pyplot as plt
 import json
+import antaus.antaus as ant
 
 
 file_path = "conf.json"

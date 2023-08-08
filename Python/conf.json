@@ -1,7 +1,1 @@
-{
-  "Antaus ": {
-    "power": 1,
-    "out_divider": 1,
-    "base_divider": 1
-  }
-}
+{"Antaus": {"power": 80, "out_divider": 1, "base_divider": 1}}
