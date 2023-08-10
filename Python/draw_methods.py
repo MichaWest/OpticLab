@@ -6,16 +6,16 @@ fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 ax.set_xlabel("$x, \mu m$")
 ax.set_ylabel("$y, \mu m$")
-#ax.set_xlim(0, 80)
-#ax.set_ylim(0, 80)
+ax.set_xlim(0, 80)
+ax.set_ylim(0, 80)
 ax.set_aspect('equal') 
 ax.grid()
 
 
 # Метод, который определяет количество углов многоугольника, который близок к окружности радиуса R
 def count_point(R):
-    c = 1 # Длина стороны многоугольника
-    phi = 2 * np.arcsin(c/(2*R))
+    c = 1                           # Длина стороны многоугольника (определяет часоту точек)
+    phi = 2 * np.arcsin(c/(2*R))      
     return np.round(np.pi/phi)+1
 
 
@@ -72,21 +72,21 @@ def animation_circle(R=20, T=2.0, x = 40, y = 40):
     ani.save("Kreis.gif",  writer='imagemagick')
 
 
-# Окружность
+# Окружность для Пезы
 # R - радиус окружности
 # (x_0, y_0) - центр
 def circle_Pesa(antaus, R=20, center_x = 40, center_y = 40):
-    dt = 0.5                             # промежутки времени подсчета координат
+    dt = 0.5                             # промежутки времени для подсчета координат (не влияет на результат)
     T = count_point(R) * dt              # Период
     omega = 2 * np.pi / T                # Угловая скорость [1/s]
 
-    # Erzeuge ein Array von Zeitpunkten für einen Umlauf
+    # Массив значений параметра t в которых будут подсчитаны координаты
     t = np.arange(0, T+dt, dt)
 
-    #Erzeuge ein leeres n x 2 - Array für die Ortsvektoren
+    # Двумерный массив для координат радиуса
     r = np.empty((t.size, 2))
 
-    # Erzeuge die Position des Massenpunktes für jeden Zeitpunkt
+    # Определяем позицию точки в каждый момент времени
     r[:, 0] = center_x + np.round(R * np.cos(omega * t), 2)
     r[:, 1] = center_y + np.round(R * np.sin(omega * t), 2)
 
@@ -106,14 +106,14 @@ def circle_Pesa(antaus, R=20, center_x = 40, center_y = 40):
     for i in range(1, t.size):
         pesa_x.move(r[i, 0])
         pesa_y.move(r[i, 1])
-        time.sleep(0.05)
+        time.sleep(0.05)                    # Время между отправкой комманд (определяет время нахождения лазера в точке)
     antaus.schutter_close()
 
     pesa_y.disconnect()
     pesa_x.disconnect()
 
 
-# Массив окружностей (в одном столбце окружности одного радиуса)
+# Массив окружностей (в одном столбце окружности одного радиуса)  для Пезы
 # radii - массив радиусов
 # powers - массив мощностей, при которых будут выжигаться окружности
 # n - колиество строк 
@@ -149,7 +149,7 @@ def array_of_circles_Pesa(radii, powers, n=3, d=10):
 
 
 
-# Линия
+# Линия для Пезы
 # (x_0, y_0) - start
 # (x, y) - end
 def line_Pesa(antaus, x_0, y_0, x, y):
@@ -201,7 +201,7 @@ def line_Pesa(antaus, x_0, y_0, x, y):
     plt.plot([x_0, x], [y_0, y])
 
 
-# Сетка
+# Сетка для Пезы
 # m - количество столбцов
 # n - количество строк
 # x - ширина столбцов
@@ -223,7 +223,7 @@ def grid_Pesa(antaus, n, m, dx, dy, x_0, y_0):
         time.sleep(0.5)
   
 
-# Сердце 
+# Сердце для Пезы
 # 2*l - ширина сердца
 # (center_x, center_y) - нижний уголок сердца         
 def heart_Pesa(antaus, l=20, center_x = 40, center_y = 40):
@@ -265,7 +265,7 @@ def heart_Pesa(antaus, l=20, center_x = 40, center_y = 40):
     plt.scatter(r[:, 0], r[:, 1])
 
 
-# Линия
+# Линия для Ximc
 # (x_0, y_0) - start
 # (x, y) - end
 def line_Ximc(antaus, x_0, x, y, id):
@@ -297,6 +297,12 @@ def line_Ximc(antaus, x_0, x, y, id):
     ximc.disconnect()
 
 
+# Сетка для Ximc
+# m - количество столбцов
+# n - количество строк
+# x - ширина столбцов
+# y - высота строк
+# (x_0, y_0) - координаты нижнего левого угла
 def grid_Ximc(antaus, n, m, dx, dy, x_0, y_0):
     x = x_0 + dx*m  # x-x_0 - ширина сетки
     y = y_0 + dy*n  # y-y_0 - высота сетки
