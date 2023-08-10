@@ -273,6 +273,7 @@ def line_Ximc(antaus, x_0, x, y, id):
     dr = 5 # координатный шаг
     dt = 2 # временной шаг 
 
+    # перемещение на другой уровень
     if id == 2:
         ximc_y = Ximc(0)
         ximc_y.connect()
@@ -287,11 +288,11 @@ def line_Ximc(antaus, x_0, x, y, id):
     ximc.connect()
 
     ximc.move(x_0, 0)
-    time.sleep(dt)
+    time.sleep(dt)                  # время на смещение в координату x_0
     antaus.schutter_open()  
-    time.sleep(dt)
+    time.sleep(dt)                  # время на отправку запроcу антауса
     ximc.move(x, 0)
-    time.sleep((x-x_0)/50)
+    time.sleep((x-x_0)/50)          # время работы антауса
     antaus.schutter_close()
 
     ximc.disconnect()
