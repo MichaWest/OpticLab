@@ -21,3 +21,7 @@ from draw_methods import *
 #cord = ximc.get_position()
 #ximc.move(cord[0]+100, cord[1])
 #ximc.disconnect()
+
+# Пример использования метода из draw_methods
+#antaus = Antaus()
+#circle_Pesa(antaus, 10, 40, 40)
