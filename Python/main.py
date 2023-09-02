@@ -16,7 +16,7 @@ from draw_methods import *
 #antaus.set_power_trim(new_power)
 
 # Сдвинуть подвижку (Ximc) на 100
-#ximc = Ximc(0) #0 - x, 1 - z (вверх низ), 2 - y
+#ximc = Ximc(Ximc_X) #Ximc_X, Ximc_Y, Ximc_Z определенные в draw_methods
 #ximc.connect()
 #cord = ximc.get_position()
 #ximc.move(cord[0]+100, cord[1])
