@@ -56,7 +56,7 @@ def update_conf(object_name, name_of_data_change, new_value):
 
 class Ximc:
     cord = ""       # cord.Position, cord.uPosition
-    number = ""      
+    number = ""      # x - 0, z - 1, y - 2
     device_id = ""   # Значение необходимое для отправки команд устройству. Определяется в методе connect
 
     def get_position(self):

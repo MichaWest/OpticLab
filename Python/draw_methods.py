@@ -2,17 +2,12 @@
 import numpy as np
 import time
 
-# коды
-Ximc_X = 0
-Ximc_Y = 2
-Ximc_Z = 1
-
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
 ax.set_xlabel("$x, \mu m$")
 ax.set_ylabel("$y, \mu m$")
-ax.set_xlim(0, 100)
-ax.set_ylim(0, 100)
+ax.set_xlim(0, 80)
+ax.set_ylim(0, 80)
 ax.set_aspect('equal') 
 ax.grid()
 
@@ -279,13 +274,13 @@ def line_Ximc(antaus, x_0, x, y, id):
     dt = 2 # временной шаг 
 
     # перемещение на другой уровень
-    if id == Ximc_Y:
-        ximc_y = Ximc(Ximc_X)
+    if id == 2:
+        ximc_y = Ximc(0)
         ximc_y.connect()
         ximc_y.move(y, 0)
         ximc_y.disconnect()
-    elif id==Ximc_X: 
-        ximc_y = Ximc(Ximc_Y)
+    elif id==0: 
+        ximc_y = Ximc(2)
         ximc_y.connect()
         ximc_y.move(y, 0)
         ximc_y.disconnect()
@@ -308,42 +303,20 @@ def line_Ximc(antaus, x_0, x, y, id):
 # n - количество строк
 # x - ширина столбцов
 # y - высота строк
-# (x_0, y_0) - координаты нижнего левого угла 
-
-def grid_Ximc(antaus, n, m, dx, dy):
-    ximc = Ximc(Ximc_X)
-    ximc.connect()
-    x_0 =  ximc.get_position()[0]
-    ximc = Ximc(Ximc_Y)
-    ximc.connect()
-    y_0 =  ximc.get_position()[0]
-
-
+# (x_0, y_0) - координаты нижнего левого угла
+def grid_Ximc(antaus, n, m, dx, dy, x_0, y_0):
     x = x_0 + dx*m  # x-x_0 - ширина сетки
     y = y_0 + dy*n  # y-y_0 - высота сетки
 
-    # линии параллельно y
+
     for i in range(0, m+1):
-        if i%2==0:
-            line_Ximc(antaus, y_0, y, x_0+i*dx, Ximc_Y)
-        else: 
-            line_Ximc(antaus, y, y_0, x_0+i*dx, Ximc_Y)
-        plt.plot([x_0, x], [y_0+i*dy, y_0+i*dy])
+        line_Ximc(antaus, y_0, y, x_0+i*dx, 2)
+        plt.plot([x_0+i*dx, x_0+i*dx], [y_0, y])
         time.sleep(0.5)
 
-    # линии параллельно x
     for i in range(0, n+1):
-        if m%2==0:
-            if i%2 == 0:
-                line_Ximc(antaus, x, x_0, y-i*dy, Ximc_X)
-            else:
-                line_Ximc(antaus, x_0, x, y-i*dy, Ximc_X)
-        else:
-            if i%2 == 0:
-                line_Ximc(antaus, x, x_0, y_0+i*dy, Ximc_X)
-            else:
-                line_Ximc(antaus, x_0, x, y_0+i*dy, Ximc_X)
-
+       
+        line_Ximc(antaus, x_0, x, y_0+i*dy, 0)
         plt.plot([x_0, x], [y_0+i*dy, y_0+i*dy])
         time.sleep(0.5)
 
