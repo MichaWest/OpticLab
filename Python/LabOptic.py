@@ -10,6 +10,7 @@ import serial
 import matplotlib.pyplot as plt
 import json
 import antaus.antaus as ant
+import time
 
 
 file_path = "conf.json"
@@ -130,7 +131,7 @@ class Ximc:
             # Get current move settings from controller
             result = lib.get_move_settings(self.device_id, byref(mvst))
             # Print command return status. It will be 0 if all is OK
-            print("Read command result: " + repr(result))   
+            print("Read command result: " + repr(mvst.Speed))   
             return mvst.Speed
         else:
             print("Device isn't connect")
@@ -155,13 +156,18 @@ class Ximc:
             print("Device isn't connect")
 
     # distance [um]
-    def move(self, distance, udistance):
+    def move_to(self, distance, udistance):
         if not  self.device_id is None:
             print("\nGoing to {0} steps, {1} microsteps".format(distance, udistance))
             result = lib.command_move(self.device_id, distance, udistance)
             print("Result: " + repr(result))
         else:
             print("Device isn't connect")
+
+    def move(self, dl):
+        cord = self.get_position()
+        self.move_to(cord[0]+dl, cord[1])
+        time.slepp(1)                       #время на обновление координат 
 
     def info(self):
         if not  self.device_id is None:
@@ -196,6 +202,9 @@ class Ximc:
                 print("Status.Flags: " + repr(hex(x_status.Flags)))
         else:
             print("Device isn't connect")
+
+    def kill(seld):
+        None
 
 
 class Pesa:

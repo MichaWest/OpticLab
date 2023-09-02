@@ -272,31 +272,33 @@ def heart_Pesa(antaus, l=20, center_x = 40, center_y = 40):
 # Линия для Ximc
 # (x_0, y_0) - start
 # (x, y) - end
-def line_Ximc(antaus, x_0, x, y, id):
+def line_Ximc(antaus,id, x_0, x):
     ximc = Ximc(id)
     dr = 5 # координатный шаг
-    dt = 2 # временной шаг 
+    dt = 2 # временной шаг для учитывание задержек на отправку команд 
 
     # перемещение на другой уровень
     if id == Ximc_Y:
         ximc_y = Ximc(Ximc_X)
         ximc_y.connect()
-        ximc_y.move(y, 0)
+        y = ximc_y.get_position()[0]
+        ximc_y.move_to(y, 0)
         ximc_y.disconnect()
     elif id==Ximc_X: 
         ximc_y = Ximc(Ximc_Y)
         ximc_y.connect()
-        ximc_y.move(y, 0)
+        y = ximc_y.get_position()[0]
+        ximc_y.move_to(y, 0)
         ximc_y.disconnect()
 
     ximc.connect()
 
-    ximc.move(x_0, 0)
+    ximc.move_to(x_0, 0)
     time.sleep(dt)                  # время на смещение в координату x_0
     antaus.schutter_open()  
     time.sleep(dt)                  # время на отправку запроcу антауса
-    ximc.move(x, 0)
-    time.sleep((x-x_0)/50)          # время работы антауса
+    ximc.move_to(x, 0)
+    time.sleep((abs(x-x_0))/70)          # время работы антауса
     antaus.schutter_close()
 
     ximc.disconnect()
@@ -313,9 +315,11 @@ def grid_Ximc(antaus, n, m, dx, dy):
     ximc = Ximc(Ximc_X)
     ximc.connect()
     x_0 =  ximc.get_position()[0]
+    ximc.disconnect()
     ximc = Ximc(Ximc_Y)
     ximc.connect()
     y_0 =  ximc.get_position()[0]
+    ximc.disconnect()
 
 
     x = x_0 + dx*m  # x-x_0 - ширина сетки
@@ -345,5 +349,31 @@ def grid_Ximc(antaus, n, m, dx, dy):
 
         plt.plot([x_0, x], [y_0+i*dy, y_0+i*dy])
         time.sleep(0.5)
+
+
+
+# Массив окружностей (в одном строке окружности одного радиуса)  Пеза рисует круги Ximc
+# radii - массив радиусов
+# powers - массив мощностей, при которых будут выжигаться окружности
+# n - колиество строк 
+# d - расстояние между окружнастями
+def array_of_circles_PX(radii, powers, n=3, d=100):
+    ximc_y =   Ximc(Ximc_Y) #ximc_x, ximc_y, ximc_z определенные в draw_methods
+    ximc_x = Ximc(Ximc_X) #ximc_x, ximc_y, ximc_z определенные в draw_methods
+    ximc_x.connect()
+    ximc_y.connect()
+
+    antaus = Antaus()
+    for j in range(0, radii.size):
+        antaus.set_power_trim(powers[j])
+        for i in range(0, n):
+            circle_Pesa(antaus, radii[j], 40, 40)
+            ximc_y.move(d)
+        ximc_x.move(d)                      # сдвиг вниз
+        ximc_y.move(-d*n)                   # сдвиг в начало строки
+
+    ximc_x.disconnect
+    ximc_y.disconnect()
+
 
 
