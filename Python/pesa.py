@@ -22,8 +22,8 @@ class Pesa:
     def move(self, step):
         with serial.Serial(port=self.com_port, baudrate=19200, xonxoff=True) as ser:
             command = 'set,' + str(self.number) + ',' + str(step) + '\r'
-            cord = 0
-            cord = cord + step
+            self.cord = 0
+            self.cord = self.cord + step
             ser.write(command.encode())
 
     def disconnect(self):

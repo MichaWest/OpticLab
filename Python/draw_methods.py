@@ -2,9 +2,15 @@
 import numpy as np
 import time
 
+from Python.pesa import Pesa
+
 Ximc_X = 0
 Ximc_Y = 2
 Ximc_Z = 1
+
+Pesa_X = 0
+Pesa_Y = 1
+Pesa_Z = 2
 
 
 # Метод, который определяет количество углов многоугольника, который близок к окружности радиуса R
@@ -32,8 +38,8 @@ def circle_Pesa(antaus, R=20, center_x=40, center_y=40):
     r[:, 0] = center_x + np.round(R * np.cos(omega * t), 2)
     r[:, 1] = center_y + np.round(R * np.sin(omega * t), 2)
 
-    pesa_x = Pesa(0)
-    pesa_y = Pesa(1)
+    pesa_x = Pesa(Pesa_X)
+    pesa_y = Pesa(Pesa_Y)
 
     pesa_x.connect()
     pesa_y.connect()
@@ -58,8 +64,8 @@ def circle_Pesa(antaus, R=20, center_x=40, center_y=40):
 # (x_0, y_0) - start
 # (x, y) - end
 def line_Pesa(antaus, x_0, y_0, x, y):
-    pesa_x = Pesa(0)
-    pesa_y = Pesa(1)
+    pesa_x = Pesa(Pesa_X)
+    pesa_y = Pesa(Pesa_Y)
     dr = 2  # координатный шаг
     dt = 0.8  # временной шаг
 
